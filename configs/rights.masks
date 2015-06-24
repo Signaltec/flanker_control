@@ -1,0 +1,22 @@
+     object     |  action  |   value   
+----------------+----------+-----------
+ DEVICES        | READ     |          1
+ DEVICES        | WRITE    |          2
+ USERS          | READ     |          4
+ USERS          | WRITE    |          8
+ LOGS           | READ     |         16
+ RULES          | READ     |         32
+ RULES          | WRITE    |         64
+ SORM3DATA      | READ     |        256
+ SORM3DATA      | ANNOTATE |        512
+ SORM3DATA      | EXPORT   |       1024
+ QUERY          | READ     |       2048
+ QUERY          | WRITE    |       4096
+ QUERY          | EXECUTE  |       8192
+ SORM2DATA      | READ     |      65536
+ SORM2DATA      | ANNOTATE |     131072
+ SORM2DATA      | EXPORT   |     262144
+ SESSION        | READ     |     524288
+ SESSION        | WRITE    |    1048576
+ SESSION        | EXECUTE  |    2097152
+ SESSION        | AAA      |    4194304

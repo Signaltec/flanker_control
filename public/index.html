@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>СОРМ Вектор-STM. Интерфейс управления службой</title>
+
+<style>
+
+body {
+  margin:40px 50px; 
+  padding:0; 
+  font-family: Veradana, sans-serif;
+  background: white; 
+  color:black; 
+  font-size:1em;
+}
+
+.clearfix{ zoom: 1; }
+.clearfix:before { content: ''; display: block; }
+.clearfix:after { content: ''; display: table; clear: both; }
+  
+h1 {font-weight:normal; font-size:280%; margin-bottom:30px; border-bottom:solid 1px #ddd; padding-bottom:10px; }
+.wrapper {width:700px; margin:0 auto;}
+
+img {border:none;}
+
+a.pseudo {border-bottom:dotted 1px; text-decoration:none; cursor:pointer;}
+  
+.place {width:320px; margin-right:15px; float:left;}
+.btn {width:276px; height:148px; margin:0 0 20px 0; font-size:150%;}
+
+.btn:hover {background:url('i/btn-bg.jpg');}
+.description {color:#777; margin-left:6px; line-height:140%;}
+
+.btn a {color:white; text-decoration:none; cursor:pointer}
+  
+.configuration {margin-top:2em;}
+  
+.shema {margin-bottom: 1em; padding-left:58px}  
+.device {}
+
+.liner {margin:20px 0; padding:0; float:left; width:170px;}  
+.liner li {list-style-type: none; height: 30px; background:url('i/pixel.gif') 0 10px repeat-x;}
+.liner li span {background:white; padding: 0 7px; color:#279401;}
+.liner li span.error {color: #cc0000;}
+.icon-small {width:14px;}
+  
+.outport .liner {margin-top: 60px}
+.outport .liner span {float:right}
+  
+.box {border:solid 1px #ccc; width:150px; height:148px; float:left; position:relative}
+.box-ok {background:url('i/ok.png') 52% center no-repeat; background-size:30%}
+.box-error {background:url('i/error.png') 52% center no-repeat; background-size:30%}
+
+
+.liner img {width:14px;}
+.el-box {border:solid 1px #ccc; width:148px; height:148px; float:left; position:relative}
+.el-box img {width:40px; position:absolute; left:55px; top:55px;}
+  
+
+.icon {width:32px; margin-right:10px}  
+.vmiddle * {float:left} 
+.vmiddle span, .vmiddle a {margin-top:8px}
+
+.configuration-select {height:200px; overflow-y:scroll; margin-top:5px; width:640px; border:solid 1px #ccc;}  
+.configuration-select ul {margin:0; padding:0}
+.configuration-select li {padding: 7px 7px 7px 12px; list-style-type:none; cursor:pointer}
+.configuration-select li:hover {background:#0069d9; color: white}
+
+.configurations span {float:right; opacity:0.5}
+
+.upload {padding-top:5px;}
+  
+.log {width:630px; height:300px; padding:5px; border:solid 1px #ccc; margin-top:30px; overflow-y:scroll}  
+</style>
+
+</head>
+
+<body>
+	
+<div class="wrapper">
+
+  <h1>СОРМ 1 Вектор-STM</h1>
+
+  <div class="shema clearfix">
+
+      <ul class="liner">
+        <li><span class="el-1"><img src="i/ok.png" class="icon-1" /> Вход № 1</span></li>
+        <li><span class="el-2"><img src="i/ok.png" class="icon-2" /> Вход № 2</span></li>
+        <li><span class="el-3"><img src="i/ok.png" class="icon-3" /> Вход № 3</span></li>
+        <li><span class="el-4"><img src="i/ok.png" class="icon-4" /> Вход № 4</span></li>
+      </ul>
+      <div class="el-box">
+        <img src="i/ok.png" class="icon-5" /> 
+      </div>
+      <div class="outport">
+        <ul class="liner">
+          <li><span class="el-6"><img src="i/ok.png" class="icon-6" /> Выход E1</span></li>
+        </ul>
+      </div>
+
+  </div>  
+  <div class="clearfix">
+    <div class="place">
+      <div class="btn btn-blue">
+        <a onClick="restart();" title="Рестарт сервиса СОРМ" target="out"><img src="i/restart_service.jpg" /></a>
+      </div>
+
+      <div class="description">
+        Используйте для перезапуска службы СОРМ. Процесс займет меньше минуты. 
+        Статус отображается ниже.
+      </div>
+    </div>
+
+    <div class="place">
+      <div class="btn btn-red">
+        <a onClick="reboot();" title="Перезагрузка операционной системы" target="out"><img src="i/restart_windows.jpg" /></a>
+      </div>
+
+      <div class="description">
+        Используйте, только если рестарт сервиса не помогает.
+        Процесс длится несколько минут, во время перезагрузки эта страница будет недоступна.
+      </div>
+    </div>
+  </div>
+  
+  <form enctype="multipart/form-data" action="/upload">
+    <div class="configuration clearfix">
+
+      <div class="place">
+        <div class="vmiddle clearfix">
+          <img src="i/config2.png" class="icon" style="margin-top:2px" /> <span>Загрузить конфигурацию</span>
+        </div>      
+        <div style="margin-top:10px">
+          <input type="file" name="file" onChange="uploadConfig(this.files);" />
+        </div>
+
+      </div>
+
+      <div class="place">
+        <div class="vmiddle">
+          <img src="i/restore.png" class="icon" /> <a class="pseudo" onClick="toggle('.configuration-select')">Восстановить конфигурацию</a>
+        </div>    
+      </div>
+
+    </div>
+  </form>
+    
+  <div class="configuration-select" style="display:none">
+        <ul class="configurations">
+        </ul>
+  </div>    
+
+  
+  <div class="log"></div>
+
+</div>
+
+  
+  
+<!-- Javascript -->
+<script src="socketio_1.3.5.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

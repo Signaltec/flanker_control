@@ -1,0 +1,137 @@
+var port = 3000;
+var portIo = 3003;
+var getStateInterval = 1000; // Интервал обновления состояния
+
+var TMPPATH = "./tmp/";
+var CONFPATH = './configs/';
+
+var logFilename = './server.log';
+var stateFilename = './state.dnt';
+
+var fs = require('fs');
+var path = require('path');
+var server = require('http').Server(app);
+var sys = require('sys');
+var exec = require('child_process').exec;
+
+// External npm
+var express = require('express');
+var io = require('socket.io')(server);
+var Tail = require('tail').Tail;
+
+  var tail = new Tail(logFilename);
+
+
+  // Log to file
+  var log4js = require('log4js');
+  log4js.configure({
+    appenders: [
+      { type: 'console' },
+      { type: 'file', filename: logFilename, category: 'cheese', layout: {
+          type: 'pattern',
+          pattern: "[%r] - %m%n"
+      }}
+    ]
+  });
+  var log = log4js.getLogger('cheese');
+
+  // Express
+  var app = express();
+
+  // Static handler
+  app.use(express.static(path.join(__dirname, 'public')));
+
+  app.route('/').get(function (req, res, next) {
+      res.sendfile('public/index.html');
+  });
+
+  // send state file to client
+  function sendStateFile(socket) {
+    fs.readFile(stateFilename, {encoding: 'utf8'}, function (err, data) {
+        if (err) {
+            log.error(err);
+        } else {
+            socket.emit('updateState', data);
+        }
+    });
+  }
+
+  var interval = null;
+
+  // SocketIO connection
+  io.sockets.on('connection', function(socket) {
+      socket.emit('updateLog', "Ready…");
+
+      // send configs
+      fs.readdir(CONFPATH, function(err, files) {
+        if (err) {
+          console.error(err);
+        } else {
+          var out = files.sort(function(a, b) {
+              return fs.statSync(CONFPATH + '/' + b).mtime.getTime() - fs.statSync(CONFPATH + '/' + a).mtime.getTime();
+          });
+          socket.emit('sendConfigs', out);
+        }
+      });
+    
+    
+      socket.on('getState', function () {
+        sendStateFile(socket);
+      });
+
+      socket.on('restart', function () {
+        log.info('restart')  
+        exec('./reboot.sh', function(error, stdout, stderr) {
+          if (error) {
+            log.error(error);
+          } else {
+            log.info(stdout);
+          }
+        });
+
+      });
+    
+      socket.on('reboot', function () {
+        log.info('reboot')  
+        exec('./reboot.sh', function(error, stdout, stderr) {
+          if (error) {
+            log.error(error);
+          } else {
+            log.info(stdout);
+          }
+        });
+        
+      });
+
+      // Interval for check «state.dnt» file
+      if (interval) clearInterval(interval);
+      
+      interval = setInterval(function() {
+        sendStateFile(socket);
+      }, getStateInterval);
+  });
+
+  // Tail log file
+  tail.on('line', function(data) {
+      io.sockets.emit('updateLog', data);
+  });
+  
+
+
+/*
+  // Watch state file
+  fs.watchFile(stateFilename, function (err, curr, prev) {
+    if (err) {
+      log.error(err);
+    } else {
+        sendStateFile(io.sockets);
+    }
+  });
+*/
+  app.listen(port, function() {
+    log.debug('WEB server listening on port ', port);
+  });
+
+  server.listen(portIo, function() {
+    log.debug("SockeIO on port " + portIo);
+  });

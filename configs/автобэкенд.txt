@@ -1,0 +1,111 @@
+1) Автоматическая синхронизация
+  - PostgreSQL
+  - Возможность выборки части данных
+  - CRUD
+  - Лог операций
+  - Пометка изменненых данных
+  - Приоритет клиента!
+  - LWW
+  - Автопоиск
+2) Хранение данных в браузере до возможности отправки
+  - Localstorage
+  - Websockets
+3) Оптимистичный подход
+  - Реактивные модификации и отложенная запись
+
+
+
+
+SERVER MODEL - MODEL + SHADOW - DOM
+
+1) Two way                angularjs
+SERVER MODEL ←→ MODEL + SHADOW ←→ DOM
+            sync   controller
+
+2) One way
+SERVER MODEL → MODEL + SHADOW → DOM
+  
+DOM events → dispatcher → update model → update server
+
+
+SQL → JSON
+JSON → SQL
+
+JSONB
+
+function Animal(name) {
+02
+    var speed = 10
+03
+    return {
+04
+        name: name,
+05
+        run: function(distance) {
+06
+            return distance / speed
+07
+        }
+08
+    }
+09
+}
+
+
+function LIST(name) {
+  var Storage = localStorage.getItem(name);
+  
+  if (!Storage) {
+    localStorage.setItem(name, []);
+    Storage = localStorage.getItem(name);
+  }
+  
+  function edit(callback) {
+    callback();
+  }
+
+  return {
+    name: name,
+    on: function(action, callback) {
+      switch (action) {
+        case 'add':
+          add(callback);
+          break;
+        case 'edit':
+          edit(callback);
+          break;
+        case 'remove':
+          remove(callback);
+          break;
+        case switch:
+          switch(callback);
+          break;
+      }  
+    }
+  }
+}
+
+
+function LISTIMMUTABLE(name) {
+  
+  function edit(callback) {
+    callback();
+  }
+
+  return {
+    name: name,
+    get: function() {
+    
+    }
+  }
+}
+
+
+
+
+
+
+
+DBLIST.prototype.on = function(action)
+
+DBITEM
