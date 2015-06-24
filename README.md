@@ -8,9 +8,9 @@ https://github.com/ildarka/flanker_control/archive/master.zip
 
 ## Установка PM2
 Зайти в папку с приложением в консоли и набрать 
-'''
+```
 npm install
-'''
+```
 
 ## Запуск и остановка приложения
 + Для запуска в консоли и набрать npm start.
