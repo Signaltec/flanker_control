@@ -8,9 +8,9 @@ var TMPPATH = "./tmp/";
 var CONFPATH = './configs/';
 var CONFEXT = '.xls';
 
-var REBOOT_SCRIPT = (isWin) ? 'reboot.bat' : './mock.sh';
-var RESTART_SCRIPT = (isWin) ? 'restart.bat' : './mock.sh';
-var CONFIGURE_SCRIPT = (isWin) ? 'configure.bat' : './mock.sh';
+var REBOOT_SCRIPT = (isWin) ? 'reboot_windows.bat' : './mock.sh';
+var RESTART_SCRIPT = (isWin) ? 'restart_service.bat' : './mock.sh';
+var CONFIGURE_SCRIPT = (isWin) ? 'apply_config.bat' : './mock.sh';
 
 var logFilename = './server.log';
 var stateFilename = './state.dnt';
